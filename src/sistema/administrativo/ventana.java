@@ -3,7 +3,9 @@ package sistema.administrativo;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -249,7 +251,14 @@ public class ventana extends JFrame {
             usuSistema[posicion].nombreUsuario = Nombre;
             usuSistema[posicion].contra = contra;
             JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente, total de usuarios" + control);
-
+            for(int i = 0; i<5; i++){
+                if(usuSistema[i] != null){
+                System.out.println(usuSistema[i].usuario);
+                System.out.println(usuSistema[i].nombreUsuario);
+                System.out.println(usuSistema[i].contra);  
+                }
+               
+            }
         } else {
             JOptionPane.showMessageDialog(null, "no se pueden registrar mas usuarios");
 
@@ -292,6 +301,20 @@ public class ventana extends JFrame {
             }
         };
         btnRegresar.addActionListener(volverMenu);
+        
+        JButton btnCargarArchivo = new JButton ("Buscar archivo");
+        btnCargarArchivo.setBounds(330, 38, 140, 20);
+        panelControlClientes.add(btnCargarArchivo);
+        ActionListener buscarArchivo = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+              File archivoSeleccionado;
+              JFileChooser ventanaSeleccion = new JFileChooser();
+              ventanaSeleccion.showOpenDialog(null);
+              archivoSeleccionado = ventanaSeleccion.getSelectedFile();
+            }
+        };
+        btnCargarArchivo.addActionListener(buscarArchivo);
     }
     public void volverMenu() {
         this.setTitle("Control Principal");
