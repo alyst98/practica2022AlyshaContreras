@@ -3,7 +3,10 @@ package sistema.administrativo;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -117,15 +120,13 @@ public class ventana extends JFrame {
 
             } else {
                 encontrado = false;
-            }
+           
+        }
+             }
             if (encontrado == false) {
                 JOptionPane.showMessageDialog(null, "Datos incorrectos");
             }
-            break;
-        }
-
     }
-
     public void panelControl() {
 
         this.getContentPane().add(panelControl);
@@ -268,7 +269,7 @@ public class ventana extends JFrame {
     public void panelControlClientes() {
         this.getContentPane().add(panelControlClientes);
         panelControlClientes.setLayout(null);
-        this.setSize(490, 450);
+        this.setSize(500, 450);
         this.setTitle("Administracion de clientes");
         panelControl.setVisible(false);
         
@@ -290,7 +291,7 @@ public class ventana extends JFrame {
         panelControlClientes.add(barraTablaClientes);
         
         JButton btnRegresar = new JButton("Volver al menu");
-        btnRegresar.setBounds(330, 10, 120, 20);
+        btnRegresar.setBounds(330, 10, 140, 20);
         panelControlClientes.add(btnRegresar);
         ActionListener volverMenu = new ActionListener() {
             @Override
@@ -312,6 +313,8 @@ public class ventana extends JFrame {
               JFileChooser ventanaSeleccion = new JFileChooser();
               ventanaSeleccion.showOpenDialog(null);
               archivoSeleccionado = ventanaSeleccion.getSelectedFile();
+                System.out.println("La ubicacion del archivo es" + archivoSeleccionado.getPath());
+                leerArchivoCSV(archivoSeleccionado.getPath());
             }
         };
         btnCargarArchivo.addActionListener(buscarArchivo);
@@ -319,5 +322,21 @@ public class ventana extends JFrame {
     public void volverMenu() {
         this.setTitle("Control Principal");
         this.setSize(400, 300);
+    }
+    
+    public void leerArchivoCSV(String ruta){
+        try{
+            BufferedReader archivoTemporal = new BufferedReader(new FileReader(ruta));
+            String lineaLeida = "";
+            while(lineaLeida != null){
+                lineaLeida = archivoTemporal.readLine();
+                if (lineaLeida != null){
+                    System.out.println(lineaLeida);
+                }
+            }
+            archivoTemporal.close();
+        }catch(IOException error){
+            JOptionPane.showMessageDialog(null, "no se pudo abrir el archivo CSV");
+        }
     }
 }
