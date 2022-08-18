@@ -29,6 +29,7 @@ public class ventana extends JFrame {
     clientes cliente[] = new clientes[100];
     int controlCliente = 0;
     JPanel panelControlClientes = new JPanel();
+    int controlClientes =2;
 
     //metodo constructor
     public ventana() {
@@ -48,23 +49,25 @@ public class ventana extends JFrame {
 //        usuSistema[1].usuario = "Juan Perez";
 //        usuSistema[1].contra = "Jperez20"; 
     }
-    public void crearClientes(){
-        cliente[0] = new clientes ();
+
+    public void crearClientes() {
+        cliente[0] = new clientes();
         cliente[0].nombre = "cliente 1";
         cliente[0].edad = 22;
         cliente[0].sexo = 'F';
         cliente[0].nit = 150;
-        
-        cliente[1] = new clientes ();
+
+        cliente[1] = new clientes();
         cliente[1].nombre = "cliente 2";
         cliente[1].edad = 32;
         cliente[1].sexo = 'M';
         cliente[1].nit = 123;
-     }
+    }
+
     public void objetos() {
         this.getContentPane().add(panelInicioSesion);
         panelInicioSesion.setLayout(null);
-        
+
         JLabel lblUsu = new JLabel("Usuario");
         lblUsu.setBounds(20, 20, 100, 15);
         panelInicioSesion.add(lblUsu);
@@ -120,12 +123,12 @@ public class ventana extends JFrame {
 
             } else {
                 encontrado = false;
-           
-        }
-             }
-            if (encontrado == false) {
-                JOptionPane.showMessageDialog(null, "Datos incorrectos");
+
             }
+        }
+        if (encontrado == false) {
+            JOptionPane.showMessageDialog(null, "Datos incorrectos");
+        }
     }
     public void panelControl() {
 
@@ -252,13 +255,13 @@ public class ventana extends JFrame {
             usuSistema[posicion].nombreUsuario = Nombre;
             usuSistema[posicion].contra = contra;
             JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente, total de usuarios" + control);
-            for(int i = 0; i<5; i++){
-                if(usuSistema[i] != null){
-                System.out.println(usuSistema[i].usuario);
-                System.out.println(usuSistema[i].nombreUsuario);
-                System.out.println(usuSistema[i].contra);  
+            for (int i = 0; i < 5; i++) {
+                if (usuSistema[i] != null) {
+                    System.out.println(usuSistema[i].usuario);
+                    System.out.println(usuSistema[i].nombreUsuario);
+                    System.out.println(usuSistema[i].contra);
                 }
-               
+
             }
         } else {
             JOptionPane.showMessageDialog(null, "no se pueden registrar mas usuarios");
@@ -272,24 +275,24 @@ public class ventana extends JFrame {
         this.setSize(500, 450);
         this.setTitle("Administracion de clientes");
         panelControl.setVisible(false);
-        
-        DefaultTableModel datosTabla = new DefaultTableModel ();
+
+        DefaultTableModel datosTabla = new DefaultTableModel();
         datosTabla.addColumn("Nombre");
         datosTabla.addColumn("Edad");
         datosTabla.addColumn("Sexo");
         datosTabla.addColumn("NIT");
-        
+
         for (int i = 0; i < 100; i++) {
-            if (cliente [i] != null) {
-               String fila [] = {cliente [i].nombre, String.valueOf(cliente[i].edad), String.valueOf(cliente[i].sexo), String.valueOf(cliente[i].nit)};
-               datosTabla.addRow(fila);
+            if (cliente[i] != null) {
+                String fila[] = {cliente[i].nombre, String.valueOf(cliente[i].edad), String.valueOf(cliente[i].sexo), String.valueOf(cliente[i].nit)};
+                datosTabla.addRow(fila);
             }
         }
-        JTable tablaClientes = new JTable (datosTabla);
-        JScrollPane  barraTablaClientes = new JScrollPane(tablaClientes);
+        JTable tablaClientes = new JTable(datosTabla);
+        JScrollPane barraTablaClientes = new JScrollPane(tablaClientes);
         barraTablaClientes.setBounds(10, 10, 300, 150);
         panelControlClientes.add(barraTablaClientes);
-        
+
         JButton btnRegresar = new JButton("Volver al menu");
         btnRegresar.setBounds(330, 10, 140, 20);
         panelControlClientes.add(btnRegresar);
@@ -302,40 +305,61 @@ public class ventana extends JFrame {
             }
         };
         btnRegresar.addActionListener(volverMenu);
-        
-        JButton btnCargarArchivo = new JButton ("Buscar archivo");
+
+        JButton btnCargarArchivo = new JButton("Buscar archivo");
         btnCargarArchivo.setBounds(330, 38, 140, 20);
         panelControlClientes.add(btnCargarArchivo);
-        ActionListener buscarArchivo = new ActionListener(){
+        ActionListener buscarArchivo = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-              File archivoSeleccionado;
-              JFileChooser ventanaSeleccion = new JFileChooser();
-              ventanaSeleccion.showOpenDialog(null);
-              archivoSeleccionado = ventanaSeleccion.getSelectedFile();
+                File archivoSeleccionado;
+                JFileChooser ventanaSeleccion = new JFileChooser();
+                ventanaSeleccion.showOpenDialog(null);
+                archivoSeleccionado = ventanaSeleccion.getSelectedFile();
                 System.out.println("La ubicacion del archivo es" + archivoSeleccionado.getPath());
                 leerArchivoCSV(archivoSeleccionado.getPath());
             }
         };
         btnCargarArchivo.addActionListener(buscarArchivo);
     }
+
     public void volverMenu() {
         this.setTitle("Control Principal");
         this.setSize(400, 300);
     }
-    
-    public void leerArchivoCSV(String ruta){
-        try{
+
+    public void leerArchivoCSV(String ruta) {
+        try {
             BufferedReader archivoTemporal = new BufferedReader(new FileReader(ruta));
             String lineaLeida = "";
-            while(lineaLeida != null){
+            while (lineaLeida != null) {
                 lineaLeida = archivoTemporal.readLine();
-                if (lineaLeida != null){
-                    System.out.println(lineaLeida);
+                if (lineaLeida != null) {
+                    String datosSeparados[] = lineaLeida.split(",");
+                    
+                    int posicion = 0;
+                    if (control < 100) {
+                        for (int i = 0; i < 99; i++) {
+                            if (cliente[i] == null) {
+                                posicion = i;
+                                break;
+                            }
+                        }
+                        cliente[posicion] = new clientes();
+                        cliente[posicion].nombre = datosSeparados[0];
+                        cliente[posicion].edad = Integer.parseInt(datosSeparados[1]);
+                        cliente[posicion].sexo = datosSeparados[2].charAt(0);
+                        cliente[posicion].nit = Integer.parseInt(datosSeparados[3]);
+                        controlCliente++;
+                        JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente, total de usuarios " + controlClientes);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "no se pueden registrar mas clientes");
+
+                    }
                 }
             }
             archivoTemporal.close();
-        }catch(IOException error){
+        } catch (IOException error) {
             JOptionPane.showMessageDialog(null, "no se pudo abrir el archivo CSV");
         }
     }
