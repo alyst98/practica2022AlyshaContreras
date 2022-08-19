@@ -351,13 +351,13 @@ public class ventana extends JFrame {
                         cliente[posicion].sexo = datosSeparados[2].charAt(0);
                         cliente[posicion].nit = Integer.parseInt(datosSeparados[3]);
                         controlCliente++;
-                        JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente, total de usuarios " + controlClientes);
                     } else {
                         JOptionPane.showMessageDialog(null, "no se pueden registrar mas clientes");
 
                     }
                 }
             }
+            JOptionPane.showMessageDialog(null, "Clientes registrado exitosamente, total de clientes " + controlCliente);
             archivoTemporal.close();
         } catch (IOException error) {
             JOptionPane.showMessageDialog(null, "no se pudo abrir el archivo CSV");
