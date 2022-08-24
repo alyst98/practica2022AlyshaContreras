@@ -18,18 +18,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class ventana extends JFrame {
 
     usuario usuSistema[] = new usuario[10];
-    JPanel panelInicioSesion = new JPanel();
-    JPanel panelControl = new JPanel();
-    JPanel panelCrearUsuario = new JPanel();
+    JPanel panelInicioSesion;
+    JPanel panelControl;
+    JPanel panelCrearUsuario;
     int control = 2;
     clientes cliente[] = new clientes[100];
     int controlCliente = 0;
-    JPanel panelControlClientes = new JPanel();
-    int controlClientes =2;
+    JPanel panelControlClientes;
+    int controlClientes = 1;
 
     //metodo constructor
     public ventana() {
@@ -65,6 +71,7 @@ public class ventana extends JFrame {
     }
 
     public void objetos() {
+        panelInicioSesion = new JPanel();
         this.getContentPane().add(panelInicioSesion);
         panelInicioSesion.setLayout(null);
 
@@ -130,8 +137,9 @@ public class ventana extends JFrame {
             JOptionPane.showMessageDialog(null, "Datos incorrectos");
         }
     }
-    public void panelControl() {
 
+    public void panelControl() {
+        panelControl = new JPanel();
         this.getContentPane().add(panelControl);
         panelControl.setLayout(null);
         this.setSize(400, 300);
@@ -160,6 +168,7 @@ public class ventana extends JFrame {
     }
 
     public void panelCrearUsuario() {
+        panelCrearUsuario = new JPanel();
         this.getContentPane().add(panelCrearUsuario);
         panelCrearUsuario.setLayout(null);
         this.setSize(340, 200);
@@ -254,7 +263,7 @@ public class ventana extends JFrame {
             usuSistema[posicion].usuario = usuario;
             usuSistema[posicion].nombreUsuario = Nombre;
             usuSistema[posicion].contra = contra;
-            JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente, total de usuarios" + control);
+            JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente, total de usurarios: " + control);
             for (int i = 0; i < 5; i++) {
                 if (usuSistema[i] != null) {
                     System.out.println(usuSistema[i].usuario);
@@ -270,9 +279,10 @@ public class ventana extends JFrame {
     }
 
     public void panelControlClientes() {
+        panelControlClientes = new JPanel();
         this.getContentPane().add(panelControlClientes);
         panelControlClientes.setLayout(null);
-        this.setSize(500, 450);
+        this.setSize(590, 450);
         this.setTitle("Administracion de clientes");
         panelControl.setVisible(false);
 
@@ -292,9 +302,27 @@ public class ventana extends JFrame {
         JScrollPane barraTablaClientes = new JScrollPane(tablaClientes);
         barraTablaClientes.setBounds(10, 10, 300, 150);
         panelControlClientes.add(barraTablaClientes);
+        
+        DefaultPieDataset datos = new DefaultPieDataset();
+        datos.setValue("Masculino", totalHombres());
+        datos.setValue("Femenino", totalMujeres());
+        JFreeChart graficoCircular = ChartFactory.createPieChart("Genero en el sistema", datos);
+        ChartPanel panelCircular = new ChartPanel (graficoCircular);
+        panelCircular.setBounds(10, 170, 250, 200);
+        panelControlClientes.add(panelCircular);
+        
+        //Grafico de columnas
+        DefaultCategoryDataset datos2 = new DefaultCategoryDataset();
+        datos2.addValue(rango18a30(), "18 a 30", "");
+        datos2.addValue(rango31a45(), "31 a 45", "");
+        datos2.addValue(rango45mas(), "45 o más", "");
+        JFreeChart graficoColumnas = ChartFactory.createBarChart("Rangos de edad", "Rangos", "No. de clientes", datos2, PlotOrientation.VERTICAL, true, true, false);
+        ChartPanel panelColumnas = new ChartPanel(graficoColumnas);
+        panelColumnas.setBounds(275, 170, 270, 200);
+        panelControlClientes.add(panelColumnas);
 
-        JButton btnRegresar = new JButton("Volver al menu");
-        btnRegresar.setBounds(330, 10, 140, 20);
+        JButton btnRegresar = new JButton("Volver al menu principal");
+        btnRegresar.setBounds(330, 10, 200, 20);
         panelControlClientes.add(btnRegresar);
         ActionListener volverMenu = new ActionListener() {
             @Override
@@ -306,8 +334,8 @@ public class ventana extends JFrame {
         };
         btnRegresar.addActionListener(volverMenu);
 
-        JButton btnCargarArchivo = new JButton("Buscar archivo");
-        btnCargarArchivo.setBounds(330, 38, 140, 20);
+        JButton btnCargarArchivo = new JButton("Buscar archivo CSV");
+        btnCargarArchivo.setBounds(330, 38, 200, 20);
         panelControlClientes.add(btnCargarArchivo);
         ActionListener buscarArchivo = new ActionListener() {
             @Override
@@ -316,11 +344,73 @@ public class ventana extends JFrame {
                 JFileChooser ventanaSeleccion = new JFileChooser();
                 ventanaSeleccion.showOpenDialog(null);
                 archivoSeleccionado = ventanaSeleccion.getSelectedFile();
-                System.out.println("La ubicacion del archivo es" + archivoSeleccionado.getPath());
+                System.out.println("La ubicacion del archivo es " + archivoSeleccionado.getPath());
                 leerArchivoCSV(archivoSeleccionado.getPath());
+                panelControlClientes.setVisible(false);
+                panelControlClientes();
             }
         };
         btnCargarArchivo.addActionListener(buscarArchivo);
+    }
+    
+    public int totalHombres(){
+        int total = 0;
+        for(int i =0; i<100; i++){
+            if(cliente[i] != null){
+                if(cliente[i].sexo == 'M'){
+                    total++;
+                }
+            }      
+        }
+        return total;
+    }
+    
+    public int totalMujeres(){
+        int total = 0;
+        for(int i =0; i<100; i++){
+            if(cliente[i] != null){
+                if(cliente[i].sexo == 'F'){
+                    total++;
+                }
+            }      
+        }
+        return total;
+    }
+    
+    public int rango18a30(){
+        int total = 0;
+        for(int i =0; i<100; i++){
+            if(cliente[i] != null){
+                if(cliente[i].edad >= 18 && cliente[i].edad <=30){
+                    total++;
+                }
+            }      
+        }
+        return total;
+    }
+    
+    public int rango31a45(){
+        int total = 0;
+        for(int i =0; i<100; i++){
+            if(cliente[i] != null){
+                if(cliente[i].edad >=31 && cliente[i].edad <=45){
+                    total++;
+                }
+            }      
+        }
+        return total;
+    }
+    
+    public int rango45mas(){
+        int total = 0;
+        for(int i =0; i<100; i++){
+            if(cliente[i] != null){
+                if(cliente[i].edad >=45){
+                    total++;
+                }
+            }      
+        }
+        return total;
     }
 
     public void volverMenu() {
@@ -336,7 +426,7 @@ public class ventana extends JFrame {
                 lineaLeida = archivoTemporal.readLine();
                 if (lineaLeida != null) {
                     String datosSeparados[] = lineaLeida.split(",");
-                    
+
                     int posicion = 0;
                     if (control < 100) {
                         for (int i = 0; i < 99; i++) {
@@ -352,12 +442,11 @@ public class ventana extends JFrame {
                         cliente[posicion].nit = Integer.parseInt(datosSeparados[3]);
                         controlCliente++;
                     } else {
-                        JOptionPane.showMessageDialog(null, "no se pueden registrar mas clientes");
-
+                        JOptionPane.showMessageDialog(null, "No se pueden registrar mas clientes");
                     }
                 }
             }
-            JOptionPane.showMessageDialog(null, "Clientes registrado exitosamente, total de clientes " + controlCliente);
+            JOptionPane.showMessageDialog(null, "Clientes registrado exitosamente, total de clientes: " + controlCliente);
             archivoTemporal.close();
         } catch (IOException error) {
             JOptionPane.showMessageDialog(null, "no se pudo abrir el archivo CSV");
