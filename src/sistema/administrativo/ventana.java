@@ -144,12 +144,12 @@ public class ventana extends JFrame {
         panelControl = new JPanel();
         this.getContentPane().add(panelControl);
         panelControl.setLayout(null);
-        this.setSize(400, 300);
+        this.setSize(260, 200);
         this.setTitle("Control Principal");
         panelInicioSesion.setVisible(false);
 
         JButton btnAdminClientes = new JButton("Administracion de clientes");
-        btnAdminClientes.setBounds(50, 10, 270, 40);
+        btnAdminClientes.setBounds(30, 15, 200, 25);
         panelControl.add(btnAdminClientes);
         ActionListener administrarClientes = new ActionListener() {
             @Override
@@ -161,12 +161,12 @@ public class ventana extends JFrame {
         btnAdminClientes.addActionListener(administrarClientes);
 
         JButton btnAdminProd = new JButton("Administracion de productos");
-        btnAdminProd.setBounds(50, 65, 270, 40);
+        btnAdminProd.setBounds(30, 50, 200, 25);
         panelControl.add(btnAdminProd);
 
-        JButton btnRepor = new JButton("Reportes");
-        btnRepor.setBounds(50, 210, 270, 40);
-        panelControl.add(btnRepor);
+//        JButton btnRepor = new JButton("Reportes");
+//        btnRepor.setBounds(50, 210, 270, 40);
+//        panelControl.add(btnRepor);
     }
 
     public void panelCrearUsuario() {
@@ -368,6 +368,11 @@ public class ventana extends JFrame {
     
     public void crearReporte(){
         try{
+          PrintWriter escribirCSS = new PrintWriter("reportes/destilo.css","UTF-8");  
+          escribirCSS.print("");
+          
+          escribirCSS.close();
+            
           PrintWriter escribir = new PrintWriter("reportes/index.html","UTF-8");
           escribir.println("<!doctype html>");
           escribir.println("<html>");
@@ -385,8 +390,8 @@ public class ventana extends JFrame {
           
           for(int i=0; i<99; i++){
               if(cliente[i] != null){
-                  escribir.println("<tr");
-                  escribir.println("td" + cliente[i].nit + "</td><td>" + cliente[i].nombre + "</td><td>" + cliente[i].edad + "</td><td>" + cliente[i].sexo + "</td>");
+                  escribir.println("<tr>");
+                  escribir.println("<td>" + cliente[i].nit + "</td><td>" + cliente[i].nombre + "</td><td>" + cliente[i].edad + "</td><td>" + cliente[i].sexo + "</td>");
                   escribir.println("</tr");
               }
           }
