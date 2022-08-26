@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -72,6 +73,7 @@ public class ventana extends JFrame {
 
     public void objetos() {
         panelInicioSesion = new JPanel();
+        //panelInicioSesion.setBackground(Color.getHSBColor(TOP_ALIGNMENT, TOP_ALIGNMENT, TOP_ALIGNMENT);
         this.getContentPane().add(panelInicioSesion);
         panelInicioSesion.setLayout(null);
 
@@ -315,7 +317,7 @@ public class ventana extends JFrame {
         DefaultCategoryDataset datos2 = new DefaultCategoryDataset();
         datos2.addValue(rango18a30(), "18 a 30", "");
         datos2.addValue(rango31a45(), "31 a 45", "");
-        datos2.addValue(rango45mas(), "45 o más", "");
+        datos2.addValue(rangomas45(), "Más de 45", "");
         JFreeChart graficoColumnas = ChartFactory.createBarChart("Rangos de edad", "Rangos", "No. de clientes", datos2, PlotOrientation.VERTICAL, true, true, false);
         ChartPanel panelColumnas = new ChartPanel(graficoColumnas);
         panelColumnas.setBounds(275, 170, 270, 200);
@@ -351,6 +353,53 @@ public class ventana extends JFrame {
             }
         };
         btnCargarArchivo.addActionListener(buscarArchivo);
+        
+        JButton btnReporte =new JButton("Crear reporte HTML");
+        btnReporte.setBounds(330, 68, 200, 20);
+        panelControlClientes.add(btnReporte);
+        ActionListener crearHTML = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+              crearReporte();
+            }
+        };
+        btnReporte.addActionListener(crearHTML);
+    }
+    
+    public void crearReporte(){
+        try{
+          PrintWriter escribir = new PrintWriter("reportes/index.html","UTF-8");
+          escribir.println("<!doctype html>");
+          escribir.println("<html>");
+          escribir.println("<head>");
+          escribir.println("<title>Reporte del sistema</title>");
+          escribir.println("</head>");
+          escribir.println("<body>");
+          escribir.println("<h1>Listado de clientes en el sistema</h1>");
+          escribir.println("<br>");
+          
+          escribir.println("<table border =1>");
+          escribir.println("<tr>");
+          escribir.println("<td>NIT</td> <td>Nombre</td> <td>Edad</td> <td>Sexo</td> ");
+          escribir.println("</tr");
+          
+          for(int i=0; i<99; i++){
+              if(cliente[i] != null){
+                  escribir.println("<tr");
+                  escribir.println("td" + cliente[i].nit + "</td><td>" + cliente[i].nombre + "</td><td>" + cliente[i].edad + "</td><td>" + cliente[i].sexo + "</td>");
+                  escribir.println("</tr");
+              }
+          }
+          escribir.println("</table>");
+          
+          
+          escribir.println("</body>");
+          escribir.println("</html>");
+          escribir.close();
+          JOptionPane.showMessageDialog(null, "Reporte creado con exito, este se encuentra en la carperta REPORTES");
+        }catch(IOException error){
+            JOptionPane.showMessageDialog(null, "No se pudo crear el reporte");
+        }
     }
     
     public int totalHombres(){
@@ -401,11 +450,11 @@ public class ventana extends JFrame {
         return total;
     }
     
-    public int rango45mas(){
+    public int rangomas45(){
         int total = 0;
         for(int i =0; i<100; i++){
             if(cliente[i] != null){
-                if(cliente[i].edad >=45){
+                if(cliente[i].edad >45){
                     total++;
                 }
             }      
