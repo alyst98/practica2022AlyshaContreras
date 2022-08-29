@@ -32,17 +32,22 @@ public class ventana extends JFrame {
     JPanel panelInicioSesion;
     JPanel panelControl;
     JPanel panelCrearUsuario;
-    int control = 2;
-    clientes cliente[] = new clientes[100];
-    int controlCliente = 0;
+    JPanel panelControlProd;
     JPanel panelControlClientes;
+    clientes cliente[] = new clientes[100];
+    productos prod[] = new productos[100];
     int controlClientes = 1;
+    int controlCliente = 0;
+    int control = 2;
+    int producto =1;
+    
 
     //metodo constructor
     public ventana() {
         objetos();
         crearAdmin();
         crearClientes();
+//        crearProductos();
     }
 
     public void crearAdmin() {
@@ -70,10 +75,14 @@ public class ventana extends JFrame {
         cliente[1].sexo = 'M';
         cliente[1].nit = 123;
     }
-
+    public void crearProd() {
+        prod[0] = new productos();
+        prod[0].nombre = "Producto 1";
+        prod[0].cantidad = 5;
+        prod[0].precio = 32;
+    }
     public void objetos() {
         panelInicioSesion = new JPanel();
-        //panelInicioSesion.setBackground(Color.getHSBColor(TOP_ALIGNMENT, TOP_ALIGNMENT, TOP_ALIGNMENT);
         this.getContentPane().add(panelInicioSesion);
         panelInicioSesion.setLayout(null);
 
@@ -163,6 +172,14 @@ public class ventana extends JFrame {
         JButton btnAdminProd = new JButton("Administracion de productos");
         btnAdminProd.setBounds(30, 50, 200, 25);
         panelControl.add(btnAdminProd);
+        ActionListener adinistrarProd =new ActionListener (){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                panelControlProd();
+                panelControlProd.setVisible(true);
+            }
+        };
+        btnAdminProd.addActionListener(adinistrarProd);
 
 //        JButton btnRepor = new JButton("Reportes");
 //        btnRepor.setBounds(50, 210, 270, 40);
@@ -356,7 +373,7 @@ public class ventana extends JFrame {
         
         JButton btnReporte =new JButton("Crear reporte HTML");
         btnReporte.setBounds(330, 68, 200, 20);
-        panelControlClientes.add(btnReporte);
+        panelControlClientes.add(btnReporte);        
         ActionListener crearHTML = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -366,8 +383,73 @@ public class ventana extends JFrame {
         btnReporte.addActionListener(crearHTML);
     }
     
+    public void panelControlProd (){
+        panelControlProd = new JPanel();
+        this.getContentPane().add(panelControlProd);
+        panelControlProd.setLayout(null);
+        this.setSize(590, 450);
+        this.setTitle("Administracion de productos");
+        panelControl.setVisible(false);
+        
+        DefaultTableModel datosTabla = new DefaultTableModel();
+        datosTabla.addColumn("Nombre");
+        datosTabla.addColumn("Precio");
+        datosTabla.addColumn("Cantidad");
+
+        for (int i = 0; i < 100; i++) {
+            if (prod[i] != null) {
+                String fila[] = {prod[i].nombre, String.valueOf(prod[i].precio), String.valueOf(prod[i].cantidad)};
+                datosTabla.addRow(fila);
+            }
+        }
+        JTable tablaProductos = new JTable(datosTabla);
+        JScrollPane barraTablaProductos = new JScrollPane(tablaProductos);
+        barraTablaProductos.setBounds(10, 10, 300, 150);
+        panelControlProd.add(barraTablaProductos);
+//        
+//        DefaultCategoryDataset datos2 = new DefaultCategoryDataset();
+//        datos2.addValue(rango18a30(), "18 a 30", "");
+//        datos2.addValue(rango31a45(), "31 a 45", "");
+//        datos2.addValue(rangomas45(), "Más de 45", "");
+//        JFreeChart graficoColumnas = ChartFactory.createBarChart("Rangos de productos", "Precio", "Cantidad", datos2, PlotOrientation.VERTICAL, true, true, false);
+//        ChartPanel panelColumnas = new ChartPanel(graficoColumnas);
+//        panelColumnas.setBounds(275, 170, 270, 200);
+//        panelControlProd.add(panelColumnas);
+
+        JButton btnRegresar = new JButton("Volver al menu principal");
+        btnRegresar.setBounds(330, 10, 200, 20);
+        panelControlProd.add(btnRegresar);
+        ActionListener volverMenu = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                panelControl.setVisible(true);
+                panelControlProd.setVisible(false);
+                volverMenu();
+            }
+        };
+        btnRegresar.addActionListener(volverMenu);
+    }
+    
+    public void ordenar (){
+        clientes auxiliar;
+        for(int i=0;i<99; i++){
+            for(int j=0; j<99; j++){
+                if(cliente[j+1] == null){
+                    break;
+                }else{
+                    if(cliente[j].edad>cliente[j+1].edad){
+                        auxiliar = cliente[j+1];
+                        cliente[j+1] = cliente[j];
+                        cliente[j] = auxiliar;
+                    }
+                }
+            }
+        }
+    }
+    
     public void crearReporte(){
         try{
+          ordenar ();
           PrintWriter escribirCSS = new PrintWriter("reportes/destilo.css","UTF-8");  
           escribirCSS.print("");
           
