@@ -471,7 +471,7 @@ public class ventana extends JFrame {
         };
         btnReporte2.addActionListener(crearHTML); 
     }
-    
+    //ordenar clientes
     public void ordenar (){
         clientes auxiliar;
         for(int i=0;i<99; i++){
@@ -488,13 +488,35 @@ public class ventana extends JFrame {
             }
         }
     }
+    //ordenar productos
+    public void ordenar2(){
+        productos auxiliar;
+        for(int i=0;i<99; i++){
+            for(int j=0; j<99; j++){
+                if(prod[j+1] == null){
+                    break;
+                }else{
+                    if(prod[j].precio>prod[j+1].precio){
+                        auxiliar = prod[j+1];
+                        prod[j+1] = prod[j];
+                        prod[j] = auxiliar;
+                    }
+                }
+            }
+        }
+    }
     //reporte clientes
     public void crearReporte(){
         try{
           ordenar ();
-          PrintWriter escribirCSS = new PrintWriter("reportes/destilo.css","UTF-8");  
-          escribirCSS.print("");
-          
+          PrintWriter escribirCSS = new PrintWriter("reportes/estilo.css","UTF-8");  
+          escribirCSS.print("html {   font-size: 20px; font-family: 'Open Sans', sans-serif; }");
+          escribirCSS.print("h1 { font-size: 60px; text-align: center; }");
+          escribirCSS.print("p, li {   font-size: 16px;   line-height: 2;   letter-spacing: 1px; }");
+          escribirCSS.print("table { table-layout: fixed;   width:250px; text-align: center; background-color: #73C6B6; }   td{border: 1px solid black; width: 190px;  word-wrap: break-word; }");
+          escribirCSS.print("html { background-color: #00539F; }");
+          escribirCSS.print("body { width: 970px; margin: 0 auto; background-color: #DAF7A6; padding: 0 20px 20px 20px; border: 5px solid black; }");
+          escribirCSS.print("h1 { margin: 0; padding: 20px 0; color: #45B39D; text-shadow: 3px 3px 1px black; }");
           escribirCSS.close();
             
           PrintWriter escribir = new PrintWriter("reportes/index.html","UTF-8");
@@ -502,6 +524,7 @@ public class ventana extends JFrame {
           escribir.println("<html>");
           escribir.println("<head>");
           escribir.println("<title>Reporte del sistema</title>");
+          escribir.println("<link rel=\"stylesheet\"href=\"estilo.css\">");
           escribir.println("</head>");
           escribir.println("<body>");
           escribir.println("<h1>Listado de clientes en el sistema</h1>");
@@ -520,8 +543,6 @@ public class ventana extends JFrame {
               }
           }
           escribir.println("</table>");
-          
-          
           escribir.println("</body>");
           escribir.println("</html>");
           escribir.close();
@@ -533,9 +554,15 @@ public class ventana extends JFrame {
     //Reporte productos 
         public void crearReporte2(){
         try{
-          ordenar ();
+          ordenar2 ();
           PrintWriter escribirCSS2 = new PrintWriter("reportes prod./estilo.css","UTF-8");  
-          escribirCSS2.print("");
+          escribirCSS2.print("html {   font-size: 20px; font-family: 'Open Sans', sans-serif; }");
+          escribirCSS2.print("h1 { font-size: 60px; text-align: center; }");
+          escribirCSS2.print("p, li {   font-size: 16px;   line-height: 2;   letter-spacing: 1px; }");
+          escribirCSS2.print("table { table-layout: fixed;   width:250px; text-align: center; background-color: #73C6B6; }   td{border: 1px solid black; width: 190px;  word-wrap: break-word; }");
+          escribirCSS2.print("html { background-color: #00539F; }");
+          escribirCSS2.print("body { width: 970px; margin: 0 auto; background-color: #DAF7A6; padding: 0 20px 20px 20px; border: 5px solid black; }");
+          escribirCSS2.print("h1 { margin: 0; padding: 20px 0; color: #45B39D; text-shadow: 3px 3px 1px black; }");
           
           escribirCSS2.close();
             
@@ -544,6 +571,7 @@ public class ventana extends JFrame {
           escribir2.println("<html>");
           escribir2.println("<head>");
           escribir2.println("<title>Reporte del sistema</title>");
+          escribir2.println("<link rel=\"stylesheet\"href=\"estilo.css\">");
           escribir2.println("</head>");
           escribir2.println("<body>");
           escribir2.println("<h1>Listado de productos en el sistema</h1>");
